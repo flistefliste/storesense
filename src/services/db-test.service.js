@@ -2,13 +2,14 @@ import { SqlDatabase } from "langchain/sql_db";
 import { DataSource } from "typeorm";
 import { ChatOpenAI } from "@langchain/openai";
 import { pull } from "langchain/hub";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { ChatPromptTemplate, FewShotPromptTemplate } from "@langchain/core/prompts";
 import { Annotation } from "@langchain/langgraph";
 import { z } from "zod";
+import { QuerySqlTool } from "langchain/tools/sql";
 import { config } from "./../utils/config.js";
 import { includeTables } from "../utils/includeTables.js";
 import { tableInfos } from "./../utils/tableInfos.js";
-import { QuerySqlTool } from "langchain/tools/sql";
+import { examples } from "./../utils/examples.js";
 
 const InputStateAnnotation = Annotation.Root({
   question: Annotation,
@@ -27,9 +28,38 @@ const llm = new ChatOpenAI({
   temperature: 0
 });
 
-const queryPromptTemplate = await pull(
-  "langchain-ai/sql-query-system-prompt"
-);
+// const queryPromptTemplate = await pull(
+//   "langchain-ai/sql-query-system-prompt"
+// );
+
+const systemPrompt = `
+You are a Prestashop 1.7 SQL structure expert. Given an input question, create a syntactically correct {dialect} query to run to help find the answer. Unless the user specifies in his question a specific number of examples they wish to obtain, always limit your query to at most {top_k} results. You can order the results by a relevant column to return the most interesting examples in the database.
+
+Never query for all the columns from a specific table, only ask for a the few relevant columns given the question.
+
+Pay attention to use only the column names that you can see in the schema description. Be careful to not query for columns that do not exist. Also, pay attention to which column is in which table.
+
+Only use the following tables:
+{table_info}
+
+Below are a number of examples of questions and their corresponding SQL queries.
+${examples.map(
+      (t) => `
+      User input: ${t.input}
+      SQL Query: ${t.query}
+      `
+    ).join("\n")}
+`;
+
+
+const queryPromptTemplate = ChatPromptTemplate.fromMessages([
+  ["system", systemPrompt],
+  ["user", "{input}"],
+]);
+
+
+
+console.log(systemPrompt);
 
 // queryPromptTemplate.promptMessages.forEach((message) => {
 //   console.log(message.lc_kwargs.prompt.template);
@@ -75,7 +105,13 @@ const structuredLlm = llm.withStructuredOutput(queryOutput);
 // const question = "Find the least purchased products";
 // const question = "Find products that are never purchased";
 // const question = "Find products that are never purchased, plus 5 least purchased products";
-const question = "Find the top 5 customers, with the number of orders, and total amount spent";
+// const question = "Find the top 5 customers, with the number of orders, and total amount spent";
+// const question = "Find the monthly turnover for year 2024";
+// const question = "Quels sont les attributs les moins utilisés?";
+// const question = "Quel est la valeur totale du stock?";
+// const question = "Quels produits sont hors-stock ?";
+// const question = "Nombre de commandes valides (facturées) en 2020 ?";
+const question = "Classement des années par chiffre d'affaire décroissant";
 
 const writeQuery = async (state) => {
   const promptValue = await queryPromptTemplate.invoke({

@@ -1,4 +1,33 @@
 export const tableInfos = [
+  // GENERAL STUFF  
+  {
+    name: "ps_shop",
+    description: `
+Table des associations boutique avec langue.
+Champs principaux :
+- id_shop (INT, PK)
+- name (VARCHAR)
+`
+  },
+  {
+    name: "ps_lang",
+    description: `
+Table des langues actives.
+Champs principaux :
+- id_lang (INT, PK)
+- name (VARCHAR)
+- iso_code (VARCHAR)
+`
+  },
+  {
+    name: "ps_lang_shop",
+    description: `
+Table des associations boutique avec langue.
+Champs principaux :
+- id_lang (INT, PK, FK vers ps_lang)
+- id_shop (INT, PK, FK vers ps_shop)
+`
+  },
   // ---- PRODUITS ----
   {
     name: "ps_product",
@@ -24,8 +53,8 @@ Contient les informations globales du produit.
 Traductions et textes liés aux produits.
 Champs principaux :
 - id_product (INT, FK vers ps_product)
-- id_lang (INT)
-- id_shop (INT)
+- id_lang (INT, FK vers ps_lang)
+- id_shop (INT, FK vers ps_shop)
 - name (VARCHAR)
 - description (TEXT)
 - description_short (TEXT)
@@ -39,8 +68,8 @@ Champs principaux :
     description: `
 Table de liaison entre produit et boutique.
 Champs principaux :
-- id_product (INT)
-- id_shop (INT)
+- id_product (INT, FK vers ps_product)
+- id_shop (INT, FK vers ps_shop)
 - price (DECIMAL)
 - active (TINYINT)
 `
@@ -50,7 +79,7 @@ Champs principaux :
   {
     name: "ps_product_attribute",
     description: `
-Table des déclinaisons de produits.
+Table des déclinaisons (ou variations) de produits.
 Champs principaux :
 - id_product_attribute (INT, PK)
 - id_product (INT, FK vers ps_product)
@@ -142,5 +171,38 @@ Champs principaux :
 - email (VARCHAR)
 - date_add (DATETIME)
 `
-  }
+  },
+  {
+    name: "ps_stock_available",
+    description: `
+Table du stock des produits.
+Champs principaux :
+- id_stock_available (INT, PK)
+- id_product (INT, FK vers ps_product)
+- id_product_attribute (INT)
+- id_shop (INT)
+- quantity (INT)
+- physical_quantity (INT)
+- location (VARCHAR)
+`
+  },
+  {
+    name: "ps_order_state",
+    description: `
+Table des états de commande.
+Champs principaux :
+- id_order_state (INT, PK)
+- invoice (TINYINT)
+`
+  },
+  {
+    name: "ps_order_state_lang",
+    description: `
+Traductions des états de commande.
+Champs principaux :
+- id_order_state (INT, PK, FK vers ps_order_state)
+- id_lang (INT, PK, FK vers ps_lang)
+- name (VARCHAR)
+`
+  },
 ];
