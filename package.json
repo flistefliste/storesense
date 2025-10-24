@@ -1,0 +1,34 @@
+{
+  "name": "ecommate",
+  "version": "1.0.0",
+  "description": "Query your ecommerce Database in natural language",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flistefliste/ecommate.git"
+  },
+  "author": "flistefliste",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flistefliste/ecommate/issues"
+  },
+  "homepage": "https://github.com/flistefliste/ecommate#readme",
+  "dependencies": {
+    "@langchain/community": "^0.3.47",
+    "@langchain/core": "^0.3.61",
+    "@langchain/langgraph": "^0.2.65",
+    "@langchain/openai": "^0.5.18",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "mysql": "^2.18.1",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.27",
+    "zod": "^3.24.2"
+  }
+}
