@@ -6,6 +6,8 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { Annotation } from "@langchain/langgraph";
 import { z } from "zod";
 import { config } from "./../utils/config.js";
+import { includeTables } from "../utils/includeTables.js";
+import { tableInfos } from "./../utils/tableInfos.js";
 import { QuerySqlTool } from "langchain/tools/sql";
 
 const InputStateAnnotation = Annotation.Root({
@@ -50,6 +52,7 @@ console.log("Datasource initialized");
 
 const db = await SqlDatabase.fromDataSourceParams({
   appDataSource: datasource,
+  includeTables: includeTables
 });
 console.log("DB ready");
 
@@ -66,13 +69,22 @@ const structuredLlm = llm.withStructuredOutput(queryOutput);
 
 // const question = "How many Employees are there?" ;
 // const question = "List all products with their names" ;
-const question = "List all products with their names and unit prices, joining ps_product and ps_product_lang, for language id 1";
+// const question = "List all products with their names and unit prices, joining ps_product and ps_product_lang, for language id 1";
+// const question = "List all products with their names and unit prices, joining ps_product and ps_product_lang, for language id 1";
+// const question = "Find top 5 best seller products, with their name and price, joining ps_orders and ps_order_detail";
+// const question = "Find the least purchased products";
+// const question = "Find products that are never purchased";
+// const question = "Find products that are never purchased, plus 5 least purchased products";
+const question = "Find the top 5 customers, with the number of orders, and total amount spent";
 
 const writeQuery = async (state) => {
   const promptValue = await queryPromptTemplate.invoke({
     dialect: db.appDataSourceOptions.type,
     top_k: 10,
-    table_info: await db.getTableInfo(),
+    // table_info: await db.getTableInfo(),
+    table_info: tableInfos.map(
+      (t) => `${t.name}: ${t.description}`
+    ).join("\n"),
     input: state.question,
   });
   const result = await structuredLlm.invoke(promptValue);

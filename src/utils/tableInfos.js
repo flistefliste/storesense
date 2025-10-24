@@ -5,7 +5,7 @@ export const tableInfos = [
     description: `
 Table principale des produits.
 Champs principaux :
-- product_id (INT, PK)
+- id_product (INT, PK)
 - id_supplier (INT)
 - id_manufacturer (INT)
 - id_category_default (INT)
@@ -23,7 +23,7 @@ Contient les informations globales du produit.
     description: `
 Traductions et textes liés aux produits.
 Champs principaux :
-- product_id (INT, FK vers ps_product)
+- id_product (INT, FK vers ps_product)
 - id_lang (INT)
 - id_shop (INT)
 - name (VARCHAR)
@@ -39,7 +39,7 @@ Champs principaux :
     description: `
 Table de liaison entre produit et boutique.
 Champs principaux :
-- product_id (INT)
+- id_product (INT)
 - id_shop (INT)
 - price (DECIMAL)
 - active (TINYINT)
@@ -52,8 +52,8 @@ Champs principaux :
     description: `
 Table des déclinaisons de produits.
 Champs principaux :
-- product_attribute_id (INT, PK)
-- product_id (INT, FK vers ps_product)
+- id_product_attribute (INT, PK)
+- id_product (INT, FK vers ps_product)
 - reference (VARCHAR)
 - price (DECIMAL)
 - quantity (INT)
@@ -64,7 +64,7 @@ Champs principaux :
     description: `
 Lien entre déclinaison et attributs.
 Champs principaux :
-- product_attribute_id (INT)
+- id_product_attribute (INT)
 - id_attribute (INT)
 `
   },
@@ -105,7 +105,7 @@ Champs principaux :
     description: `
 Table principale des commandes.
 Champs principaux :
-- order_id (INT, PK)
+- id_order (INT, PK)
 - id_cart (INT)
 - id_customer (INT)
 - id_address_delivery (INT)
@@ -122,10 +122,10 @@ Champs principaux :
     description: `
 Détails des produits dans chaque commande.
 Champs principaux :
-- order_detail_id (INT, PK)
-- order_id (INT, FK vers ps_orders)
+- id_order_detail (INT, PK)
+- id_order (INT, FK vers ps_orders)
 - product_id (INT, FK vers ps_product)
-- product_attribute_id (INT)
+- id_product_attribute (INT)
 - product_name (VARCHAR)
 - product_quantity (INT)
 - product_price (DECIMAL)
@@ -136,7 +136,7 @@ Champs principaux :
     description: `
 Table des clients.
 Champs principaux :
-- customer_id (INT, PK)
+- id_customer (INT, PK)
 - firstname (VARCHAR)
 - lastname (VARCHAR)
 - email (VARCHAR)
