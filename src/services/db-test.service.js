@@ -111,7 +111,9 @@ const structuredLlm = llm.withStructuredOutput(queryOutput);
 // const question = "Quel est la valeur totale du stock?";
 // const question = "Quels produits sont hors-stock ?";
 // const question = "Nombre de commandes valides (facturées) en 2020 ?";
-const question = "Classement des années par chiffre d'affaire décroissant";
+//const question = "Classement des années par chiffre d'affaire décroissant";
+const question = "Liste des produits de type mug de la boutique 1, avec leurs noms français et anglais groupé par ID produit";
+// const question = "Url du produit Mug the adventure begins sur boutique 2 ";
 
 const writeQuery = async (state) => {
   const promptValue = await queryPromptTemplate.invoke({

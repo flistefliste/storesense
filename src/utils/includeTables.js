@@ -1,4 +1,7 @@
 export const includeTables = [
+  "ps_shop",
+  "ps_lang",
+  "ps_lang_shop",
   // --- PRODUITS & CATÉGORIES ---
   "ps_product",
   "ps_product_lang",
