@@ -152,7 +152,7 @@ const execresult = await executeQuery({
 
 const generateAnswer = async (state) => {
   const promptValue =
-    "Given the following user question, corresponding SQL query, " +
+    "In a Prestashop 1.7 context, given the following user question, corresponding SQL query, " +
     "and SQL result, answer the user question.\n\n" +
     `Question: ${question}\n` +
     `SQL Query: ${_query.query}\n` +
